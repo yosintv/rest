@@ -26,6 +26,8 @@ const menu = {
 
 // Function to populate menu for each category
 function displayMenu() {
+    console.log("Displaying Menu...");
+
     // Meal category
     const mealMenuContainer = document.getElementById('mealMenu');
     menu.meal.forEach(item => {
@@ -85,6 +87,7 @@ function displayMenu() {
 
 // Function to add items to the order
 function addToOrder(name, price) {
+    console.log(`Adding ${name} to order`);
     if (!order[name]) {
         order[name] = { quantity: 1, price };
     } else {
@@ -132,4 +135,7 @@ function sendOrder() {
     }
 }
 
-displayMenu();
+// Initial menu display
+window.onload = function() {
+    displayMenu();
+};
