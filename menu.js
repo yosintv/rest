@@ -1,90 +1,110 @@
+// Sample menu data
 const menuData = {
     meal: [
-        { name: "Grilled Chicken", price: "$12", image: "images/grilled_chicken.jpg" },
-        { name: "Pasta", price: "$10", image: "images/pasta.jpg" }
+        { name: "Burger", price: 10, image: "burger.jpg" },
+        { name: "Pizza", price: 15, image: "pizza.jpg" },
+        { name: "Pasta", price: 12, image: "pasta.jpg" }
     ],
     dinner: [
-        { name: "Steak", price: "$18", image: "images/steak.jpg" },
-        { name: "Salmon", price: "$15", image: "images/salmon.jpg" }
+        { name: "Steak", price: 20, image: "steak.jpg" },
+        { name: "Salmon", price: 18, image: "salmon.jpg" }
     ],
     breakfast: [
-        { name: "Pancakes", price: "$8", image: "images/pancakes.jpg" },
-        { name: "Omelette", price: "$7", image: "images/omelette.jpg" }
+        { name: "Pancakes", price: 8, image: "pancakes.jpg" },
+        { name: "Omelette", price: 7, image: "omelette.jpg" }
     ],
     snacks: [
-        { name: "French Fries", price: "$5", image: "images/fries.jpg" },
-        { name: "Nachos", price: "$6", image: "images/nachos.jpg" }
+        { name: "Fries", price: 5, image: "fries.jpg" },
+        { name: "Nachos", price: 6, image: "nachos.jpg" }
     ]
 };
 
-let selectedOrders = [];
+// Get URL parameters to determine the category
+const urlParams = new URLSearchParams(window.location.search);
+const category = urlParams.get('category') || 'meal';
 
-document.addEventListener("DOMContentLoaded", function () {
-    loadMenu();
-    loadTheme();
-});
+// Populate the menu table
+function populateMenu() {
+    const menuTable = document.getElementById('menu');
+    menuTable.innerHTML = ''; // Clear existing rows
 
-function loadMenu() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const category = urlParams.get("category") || "meal";
-    const menuTable = document.getElementById("menu");
-    menuTable.innerHTML = "";
-
-    if (menuData[category]) {
-        menuData[category].forEach(item => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td><img src="${item.image}" alt="${item.name}"></td>
-                <td>${item.name}</td>
-                <td>${item.price}</td>
-                <td><button onclick="addToOrder('${item.name}', '${item.price}')">Add</button></td>
-            `;
-            menuTable.appendChild(row);
-        });
-    }
+    const items = menuData[category] || [];
+    items.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><img src="images/${item.image}" alt="${item.name}"></td>
+            <td>${item.name}</td>
+            <td>$${item.price}</td>
+            <td><button onclick="addToOrder('${item.name}', ${item.price})">Add to Order</button></td>
+        `;
+        menuTable.appendChild(row);
+    });
 }
 
+// Add item to the order list
+let orderItems = [];
 function addToOrder(name, price) {
-    selectedOrders.push({ name, price });
+    orderItems.push({ name, price });
     updateOrderList();
 }
 
+// Update the order list display
 function updateOrderList() {
-    const orderList = document.getElementById("orderList");
-    orderList.innerHTML = selectedOrders.map(item => `<p>${item.name} - ${item.price}</p>`).join("");
-}
+    const orderList = document.getElementById('orderList');
+    orderList.innerHTML = '<h3>Your Order</h3>';
+    let total = 0;
 
-function confirmOrder() {
-    if (selectedOrders.length === 0) {
-        alert("No items selected!");
-        return;
-    }
-    document.getElementById("sendOrderBtn").style.display = "block";
-}
-
-function sendOrder() {
-    const tableNumber = document.getElementById("tableNumber").value;
-    if (!tableNumber) {
-        alert("Please enter your table number.");
-        return;
-    }
-
-    let orderText = `Table No: ${tableNumber}%0AOrder:%0A`;
-    selectedOrders.forEach(item => {
-        orderText += `- ${item.name} (${item.price})%0A`;
+    orderItems.forEach((item, index) => {
+        orderList.innerHTML += `
+            <div>
+                ${item.name} - $${item.price}
+                <button onclick="removeFromOrder(${index})">Remove</button>
+            </div>
+        `;
+        total += item.price;
     });
 
-    const whatsappURL = `https://wa.me/+819068332943?text=${orderText}`;
-    window.open(whatsappURL, "_blank");
+    orderList.innerHTML += `<strong>Total: $${total}</strong>`;
 }
 
-function toggleTheme() {
-    document.body.classList.toggle("dark-mode");
-    localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+// Remove item from the order list
+function removeFromOrder(index) {
+    orderItems.splice(index, 1);
+    updateOrderList();
 }
 
-function loadTheme() {
-    if (localStorage.getItem("theme") === "dark") {
-        document.body.classList.add("dark-mode");
+// Confirm order and show WhatsApp button
+function confirmOrder() {
+    const tableNumber = document.getElementById('tableNumber').value;
+    if (!tableNumber) {
+        alert('Please enter a table number.');
+        return;
     }
+    if (orderItems.length === 0) {
+        alert('Your order is empty.');
+        return;
+    }
+    document.getElementById('sendOrderBtn').style.display = 'block';
 }
+
+// Send order to WhatsApp
+function sendOrder() {
+    const tableNumber = document.getElementById('tableNumber').value;
+    let message = `Order for Table ${tableNumber}:\n`;
+    orderItems.forEach(item => {
+        message += `${item.name} - $${item.price}\n`;
+    });
+    const total = orderItems.reduce((sum, item) => sum + item.price, 0);
+    message += `Total: $${total}`;
+
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
+}
+
+// Toggle dark/light theme
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+}
+
+// Initialize the page
+populateMenu();
