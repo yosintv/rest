@@ -75,7 +75,7 @@ function sendOrder() {
         return;
     }
 
-    let orderText = `Table No: ${tableNumber}%0APreferred Time: ${preferredTime}%0AOrder:%0A`;
+    let orderText = `Room No: ${tableNumber}%0APreferred Time: ${preferredTime}%0AOrder:%0A`;
     selectedOrders.forEach(item => {
         orderText += `- ${item.name} ($${item.price})%0A`;
     });
