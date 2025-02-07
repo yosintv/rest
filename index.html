@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,16 +16,8 @@
             padding: 20px;
             transition: background 0.3s, color 0.3s;
         }
-        .category-links a {
-            font-weight: bold;
-            padding: 10px;
-            display: inline-block;
-            color: #ff9800;
-        }
-        .category-links a:hover {
-            background-color: #ff9800;
-            color: white;
-            border-radius: 5px;
+        .category {
+            margin-bottom: 40px;
         }
         table {
             width: 100%;
@@ -93,7 +86,7 @@
             margin: 5px;
         }
 
-       .menu-links a {
+        .menu-links a {
             text-decoration: none;
             color: #ff9800;
             font-weight: bold;
@@ -104,11 +97,12 @@
             background-color: #ff9800;
             border-radius: 5px;
         }
-
         
     </style>
 </head>
 <body>
+
+    
     <div class="container">
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -135,29 +129,72 @@
         </nav>
 
 
-<div class='card my-1 p-1 w-100 text-center d-block'>
-More Players: 
-<a href='/hls-player-online.html'> HLS Player Online </a> | 
-<a href='/m3u8-online-player.html'> M3U8 Online Player </a> | 
-<a href='/m3u8-player-online-free.html'> M3U8 Player Online Free </a> | 
-<a href='/m3u8-player-online.html'> M3U8 Player Online </a> |
-<a href='/m3u8-player.html'> M3U8 Player </a> | 
-<a href='/play-m3u8-online.html'> Play M3u8 Online </a> 
-</div>
 
-        
-        <!-- Table displaying menu items -->
-        <table>
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Order</th>
-                </tr>
-            </thead>
-            <tbody id="menu"></tbody>
-        </table>
+<div class="container">
+
+        <!-- Meal Category -->
+        <div class="category" id="mealCategory">
+            <h2>Meal</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Order</th>
+                    </tr>
+                </thead>
+                <tbody id="mealMenu"></tbody>
+            </table>
+        </div>
+
+        <!-- Dinner Category -->
+        <div class="category" id="dinnerCategory">
+            <h2>Dinner</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Order</th>
+                    </tr>
+                </thead>
+                <tbody id="dinnerMenu"></tbody>
+            </table>
+        </div>
+
+        <!-- Breakfast Category -->
+        <div class="category" id="breakfastCategory">
+            <h2>Breakfast</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Order</th>
+                    </tr>
+                </thead>
+                <tbody id="breakfastMenu"></tbody>
+            </table>
+        </div>
+
+        <!-- Snacks Category -->
+        <div class="category" id="snacksCategory">
+            <h2>Snacks</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Order</th>
+                    </tr>
+                </thead>
+                <tbody id="snacksMenu"></tbody>
+            </table>
+        </div>
 
         <!-- Order section -->
         <div class="order-section">
@@ -168,6 +205,7 @@ More Players:
             <button onclick="sendOrder()" id="sendOrderBtn" class="btn btn-warning">Send Order</button>
         </div>
     </div>
+
 
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
