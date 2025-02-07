@@ -1,5 +1,3 @@
-// Changes
-
 const menuData = {
     meal: [
         { name: "Grilled Chicken", price: 12, image: "images/grilled_chicken.jpg" },
@@ -59,7 +57,8 @@ function updateOrderList() {
 
 function updateTotalAmount() {
     const totalAmount = selectedOrders.reduce((total, item) => total + item.price, 0);
-    document.getElementById("totalAmount").textContent = `Total: $${totalAmount.toFixed(2)}`;
+    const totalAmountDisplay = document.getElementById("totalAmount");
+    totalAmountDisplay.textContent = `Total: $${totalAmount.toFixed(2)}`;
 }
 
 function sendOrder() {
