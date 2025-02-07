@@ -64,12 +64,19 @@ function confirmOrder() {
 
 function sendOrder() {
     const tableNumber = document.getElementById("tableNumber").value;
+    const preferredTime = document.getElementById("preferredTime").value;
+    
     if (!tableNumber) {
         alert("Please enter your table number.");
         return;
     }
+    
+    if (!preferredTime) {
+        alert("Please select a preferred time.");
+        return;
+    }
 
-    let orderText = `Table No: ${tableNumber}%0AOrder:%0A`;
+    let orderText = `Table No: ${tableNumber}%0APreferred Time: ${preferredTime}%0AOrder:%0A`;
     selectedOrders.forEach(item => {
         orderText += `- ${item.name} (${item.price})%0A`;
     });
