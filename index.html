@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Menu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .theme-toggle {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+        .category-links {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .category-links a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #ff9800;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #ff9800;
+            color: white;
+        }
+        img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .dark-mode {
+            background-color: #333;
+            color: white;
+        }
+        .dark-mode table {
+            background: #444;
+        }
+        .dark-mode th {
+            background-color: #ffb74d;
+        }
+        .order-section {
+            margin-top: 20px;
+        }
+        .order-section input {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        .order-list {
+            margin-bottom: 10px;
+        }
+        .order-section button {
+            padding: 10px;
+            background: #ff9800;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="theme-toggle">
+            <button onclick="toggleTheme()">Toggle Theme</button>
+        </div>
+        <div class="category-links">
+            <a href="menu.html?category=meal">Meal</a>
+            <a href="menu.html?category=dinner">Dinner</a>
+            <a href="menu.html?category=breakfast">Breakfast</a>
+            <a href="menu.html?category=snacks">Snacks</a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Order</th>
+                </tr>
+            </thead>
+            <tbody id="menu"></tbody>
+        </table>
+        <div class="order-section">
+            <div class="order-list" id="orderList"></div>
+            <input type="number" id="tableNumber" placeholder="Enter Table Number">
+            <button onclick="confirmOrder()">Confirm Order</button>
+            <button onclick="sendOrder()" style="display:none;" id="sendOrderBtn">Send Order to WhatsApp</button>
+        </div>
+    </div>
+    <script src="menu.js"></script>
+</body>
+</html>
