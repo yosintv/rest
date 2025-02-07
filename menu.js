@@ -1,19 +1,19 @@
 const menuData = {
     meal: [
-        { name: "Grilled Chicken", price: "$12", image: "images/grilled_chicken.jpg" },
-        { name: "Pasta", price: "$10", image: "images/pasta.jpg" }
+        { name: "Grilled Chicken", price: 12, image: "images/grilled_chicken.jpg" },
+        { name: "Pasta", price: 10, image: "images/pasta.jpg" }
     ],
     dinner: [
-        { name: "Steak", price: "$18", image: "images/steak.jpg" },
-        { name: "Salmon", price: "$15", image: "images/salmon.jpg" }
+        { name: "Steak", price: 18, image: "images/steak.jpg" },
+        { name: "Salmon", price: 15, image: "images/salmon.jpg" }
     ],
     breakfast: [
-        { name: "Pancakes", price: "$8", image: "images/pancakes.jpg" },
-        { name: "Omelette", price: "$7", image: "images/omelette.jpg" }
+        { name: "Pancakes", price: 8, image: "images/pancakes.jpg" },
+        { name: "Omelette", price: 7, image: "images/omelette.jpg" }
     ],
     snacks: [
-        { name: "French Fries", price: "$5", image: "images/fries.jpg" },
-        { name: "Nachos", price: "$6", image: "images/nachos.jpg" }
+        { name: "French Fries", price: 5, image: "images/fries.jpg" },
+        { name: "Nachos", price: 6, image: "images/nachos.jpg" }
     ]
 };
 
@@ -36,8 +36,8 @@ function loadMenu() {
             row.innerHTML = `
                 <td><img src="${item.image}" alt="${item.name}"></td>
                 <td>${item.name}</td>
-                <td>${item.price}</td>
-                <td><button onclick="addToOrder('${item.name}', '${item.price}')">Add</button></td>
+                <td>$${item.price}</td>
+                <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price})">Add</button></td>
             `;
             menuTable.appendChild(row);
         });
@@ -47,30 +47,28 @@ function loadMenu() {
 function addToOrder(name, price) {
     selectedOrders.push({ name, price });
     updateOrderList();
+    updateTotalAmount();
 }
 
 function updateOrderList() {
     const orderList = document.getElementById("orderList");
-    orderList.innerHTML = selectedOrders.map(item => `<p>${item.name} - ${item.price}</p>`).join("");
+    orderList.innerHTML = selectedOrders.map(item => `<p>${item.name} - $${item.price}</p>`).join("");
 }
 
-function confirmOrder() {
-    if (selectedOrders.length === 0) {
-        alert("No items selected!");
-        return;
-    }
-    document.getElementById("sendOrderBtn").style.display = "block";
+function updateTotalAmount() {
+    const totalAmount = selectedOrders.reduce((total, item) => total + item.price, 0);
+    document.getElementById("totalAmount").textContent = `Total: $${totalAmount.toFixed(2)}`;
 }
 
 function sendOrder() {
     const tableNumber = document.getElementById("tableNumber").value;
     const preferredTime = document.getElementById("preferredTime").value;
-    
+
     if (!tableNumber) {
         alert("Please enter your table number.");
         return;
     }
-    
+
     if (!preferredTime) {
         alert("Please select a preferred time.");
         return;
@@ -78,8 +76,11 @@ function sendOrder() {
 
     let orderText = `Table No: ${tableNumber}%0APreferred Time: ${preferredTime}%0AOrder:%0A`;
     selectedOrders.forEach(item => {
-        orderText += `- ${item.name} (${item.price})%0A`;
+        orderText += `- ${item.name} ($${item.price})%0A`;
     });
+
+    const totalAmount = selectedOrders.reduce((total, item) => total + item.price, 0);
+    orderText += `%0ATotal: $${totalAmount.toFixed(2)}`;
 
     const whatsappURL = `https://wa.me/+819068332943?text=${orderText}`;
     window.open(whatsappURL, "_blank");
