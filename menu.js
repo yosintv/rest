@@ -1,3 +1,5 @@
+// Changes
+
 const menuData = {
     meal: [
         { name: "Grilled Chicken", price: 12, image: "images/grilled_chicken.jpg" },
