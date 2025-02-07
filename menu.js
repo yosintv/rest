@@ -74,7 +74,7 @@ function sendOrder() {
         orderText += `- ${item.name} (${item.price})%0A`;
     });
 
-    const whatsappURL = `https://wa.me/+81906832943?text=${orderText}`;
+    const whatsappURL = `https://wa.me/+819068332943?text=${orderText}`;
     window.open(whatsappURL, "_blank");
 }
 
