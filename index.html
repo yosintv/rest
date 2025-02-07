@@ -2,319 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta content='width=device-width,minimum-scale=1,initial-scale=1' name='viewport'/>
     <title>Restaurant Menu</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f8f8;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            transition: background 0.3s, color 0.3s;
-        }
-        .category {
-            margin-bottom: 40px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            overflow: hidden;
-            margin-top: 20px;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #ff9800;
-            color: white;
-        }
-        img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        .order-section {
-            margin-top: 20px;
-        }
-        .order-section input {
-            padding: 10px;
-            margin-bottom: 10px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .order-section button {
-            padding: 10px;
-            background: #ff9800;
-            color: white;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-        .order-section button:hover {
-            background: #ff5722;
-        }
-        .add-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .add-btn:hover {
-            background-color: #45a049;
-        }
-        .total-amount {
-            font-weight: bold;
-            margin-top: 15px;
-        }
-        .category-links a {
-            margin: 5px;
-        }
-
-       .menu-links a {
-            text-decoration: none;
-            color: #ff9800;
-            font-weight: bold;
-            padding: 5px;
-        }
-        .menu-links a:hover {
-            color: white;
-            background-color: #ff9800;
-            border-radius: 5px;
-        }
-
-        
+        /* Existing CSS styles go here */
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="text-center">Restaurant Menu</h1>
-
-        <!-- Meal Category -->
-        <div class="category" id="mealCategory">
-            <h2>Meal</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Order</th>
-                    </tr>
-                </thead>
-                <tbody id="mealMenu"></tbody>
-            </table>
+        <div class="theme-toggle">
+            <button onclick="toggleTheme()">Toggle Theme</button>
         </div>
-
-        <!-- Dinner Category -->
-        <div class="category" id="dinnerCategory">
-            <h2>Dinner</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Order</th>
-                    </tr>
-                </thead>
-                <tbody id="dinnerMenu"></tbody>
-            </table>
+        <div class="category-links">
+            <a href="menu.html?category=meal">Meal</a>
+            <a href="menu.html?category=dinner">Dinner</a>
+            <a href="menu.html?category=breakfast">Breakfast</a>
+            <a href="menu.html?category=snacks">Snacks</a>
         </div>
-
-        <!-- Breakfast Category -->
-        <div class="category" id="breakfastCategory">
-            <h2>Breakfast</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Order</th>
-                    </tr>
-                </thead>
-                <tbody id="breakfastMenu"></tbody>
-            </table>
-        </div>
-
-        <!-- Snacks Category -->
-        <div class="category" id="snacksCategory">
-            <h2>Snacks</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Order</th>
-                    </tr>
-                </thead>
-                <tbody id="snacksMenu"></tbody>
-            </table>
-        </div>
-
-        <!-- Order section -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Order</th>
+                </tr>
+            </thead>
+            <tbody id="menu"></tbody>
+        </table>
         <div class="order-section">
             <div class="order-list" id="orderList"></div>
-            <input type="number" id="tableNumber" placeholder="Enter Room Number" class="form-control">
-            <input type="text" id="preferredTime" placeholder="Preferred Time (e.g. 6:30 PM)" class="form-control">
-            <div class="total-amount" id="totalAmount">Total: $0.00</div>
-            <button onclick="sendOrder()" id="sendOrderBtn" class="btn btn-warning">Send Order</button>
+            <input type="number" id="tableNumber" placeholder="Enter Room Number">
+            <input type="time" id="preferredTime">
+            <p id="totalAmount">Total: $0.00</p>
+            <button onclick="sendOrder()">Send Order</button>
         </div>
     </div>
-
-    <!-- Bootstrap JS and Popper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-
-    <script>
-        const order = {};
-        let totalAmount = 0;
-
-        // Menu object
-        const menu = {
-            meal: [
-                { name: "Grilled Chicken", price: 12, image: "images/grilled_chicken.jpg" },
-                { name: "Pasta", price: 10, image: "images/pasta.jpg" }
-            ],
-            dinner: [
-                { name: "Steak", price: 18, image: "images/steak.jpg" },
-                { name: "Salmon", price: 15, image: "images/salmon.jpg" }
-            ],
-            breakfast: [
-                { name: "Pancakes", price: 8, image: "images/pancakes.jpg" },
-                { name: "Omelette", price: 7, image: "images/omelette.jpg" }
-            ],
-            snacks: [
-                { name: "French Fries", price: 5, image: "images/fries.jpg" },
-                { name: "Nachos", price: 6, image: "images/nachos.jpg" }
-            ]
-        };
-
-        // Function to populate menu for each category
-        function displayMenu() {
-            // Meal category
-            const mealMenuContainer = document.getElementById('mealMenu');
-            menu.meal.forEach(item => {
-                const row = `
-                    <tr>
-                        <td><img src="${item.image}" alt="${item.name}"></td>
-                        <td>${item.name}</td>
-                        <td>$${item.price}</td>
-                        <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price})">Add to Order</button></td>
-                    </tr>
-                `;
-                mealMenuContainer.innerHTML += row;
-            });
-
-            // Dinner category
-            const dinnerMenuContainer = document.getElementById('dinnerMenu');
-            menu.dinner.forEach(item => {
-                const row = `
-                    <tr>
-                        <td><img src="${item.image}" alt="${item.name}"></td>
-                        <td>${item.name}</td>
-                        <td>$${item.price}</td>
-                        <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price})">Add to Order</button></td>
-                    </tr>
-                `;
-                dinnerMenuContainer.innerHTML += row;
-            });
-
-            // Breakfast category
-            const breakfastMenuContainer = document.getElementById('breakfastMenu');
-            menu.breakfast.forEach(item => {
-                const row = `
-                    <tr>
-                        <td><img src="${item.image}" alt="${item.name}"></td>
-                        <td>${item.name}</td>
-                        <td>$${item.price}</td>
-                        <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price})">Add to Order</button></td>
-                    </tr>
-                `;
-                breakfastMenuContainer.innerHTML += row;
-            });
-
-            // Snacks category
-            const snacksMenuContainer = document.getElementById('snacksMenu');
-            menu.snacks.forEach(item => {
-                const row = `
-                    <tr>
-                        <td><img src="${item.image}" alt="${item.name}"></td>
-                        <td>${item.name}</td>
-                        <td>$${item.price}</td>
-                        <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price})">Add to Order</button></td>
-                    </tr>
-                `;
-                snacksMenuContainer.innerHTML += row;
-            });
-        }
-
-        // Function to add items to the order
-        function addToOrder(name, price) {
-            if (!order[name]) {
-                order[name] = { quantity: 1, price };
-            } else {
-                order[name].quantity += 1;
-            }
-            updateOrderList();
-        }
-
-        // Function to update the order list
-        function updateOrderList() {
-            const orderListContainer = document.getElementById('orderList');
-            orderListContainer.innerHTML = '';
-            totalAmount = 0;
-            for (const item in order) {
-                const itemTotal = order[item].price * order[item].quantity;
-                totalAmount += itemTotal;
-                orderListContainer.innerHTML += `
-                    <div>
-                        ${item} x ${order[item].quantity} = $${itemTotal.toFixed(2)}
-                    </div>
-                `;
-            }
-            document.getElementById('totalAmount').textContent = `Total: $${totalAmount.toFixed(2)}`;
-        }
-
-        // Function to send the order (through WhatsApp)
-        function sendOrder() {
-            const tableNumber = document.getElementById('tableNumber').value;
-            const preferredTime = document.getElementById('preferredTime').value;
-
-            if (tableNumber && Object.keys(order).length > 0) {
-                const orderDetails = {
-                    tableNumber,
-                    items: order,
-                    totalAmount,
-                    preferredTime
-                };
-
-                const orderMessage = `Order Details:\nTable: ${orderDetails.tableNumber}\nItems: ${JSON.stringify(orderDetails.items)}\nTotal: $${orderDetails.totalAmount.toFixed(2)}\nPreferred Time: ${orderDetails.preferredTime}`;
-
-                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(orderMessage)}`;
-                window.open(whatsappUrl, '_blank');
-            } else {
-                alert("Please fill in your table number and order items.");
-            }
-        }
-
-        displayMenu();
-    </script>
+    <script src="menu.js"></script>
 </body>
 </html>
