@@ -36,7 +36,7 @@ function loadMenu() {
             row.innerHTML = `
                 <td><img src="${item.image}" alt="${item.name}"></td>
                 <td>${item.name}</td>
-                <td>$${item.price}</td>
+                <td>रु.${item.price}</td>
                 <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price})">Add</button></td>
             `;
             menuTable.appendChild(row);
@@ -52,12 +52,12 @@ function addToOrder(name, price) {
 
 function updateOrderList() {
     const orderList = document.getElementById("orderList");
-    orderList.innerHTML = selectedOrders.map(item => `<p>${item.name} - $${item.price}</p>`).join("");
+    orderList.innerHTML = selectedOrders.map(item => `<p>${item.name} - रु.${item.price}</p>`).join("");
 }
 
 function updateTotalAmount() {
     const totalAmount = selectedOrders.reduce((total, item) => total + item.price, 0);
-    document.getElementById("totalAmount").textContent = `Total: $${totalAmount.toFixed(2)}`;
+    document.getElementById("totalAmount").textContent = `Total: रु.${totalAmount.toFixed(2)}`;
 }
 
 function sendOrder() {
@@ -76,11 +76,11 @@ function sendOrder() {
 
     let orderText = `Room No: ${roomNumber}\nDesired Time: ${desiredTime}\nOrder:\n`;
     selectedOrders.forEach(item => {
-        orderText += `- ${item.name} ($${item.price})\n`;
+        orderText += `- ${item.name} (रु.${item.price})\n`; // Add Your Own Currency Here
     });
 
     const totalAmount = selectedOrders.reduce((total, item) => total + item.price, 0);
-    orderText += `\nTotal: $${totalAmount.toFixed(2)}`;
+    orderText += `\nTotal: रु.${totalAmount.toFixed(2)}`; // Add Your Own Currency Here
 
     const whatsappURL = `https://wa.me/819068332943?text=${encodeURIComponent(orderText)}`;
     window.location.href = whatsappURL;
