@@ -21,7 +21,7 @@ function loadMenu() {
                 menuItems.forEach(item => {
                     const row = document.createElement("tr");
                     row.innerHTML = `
-                        <td><img src="${item.image}" alt="${item.name}"></td>
+                        <td><img src="${item.image}" alt="${item.name}" style="width: 50px; height: 50px;"></td>
                         <td>${item.name}</td>
                         <td>रु.${item.price}</td>
                         <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price}, '${item.image}')">Add</button></td>
@@ -32,17 +32,20 @@ function loadMenu() {
                 // If the data is structured by category (e.g., Drinks have subcategories like Soft Drinks and Hard Drinks)
                 for (const [categoryName, items] of Object.entries(menuItems)) {
                     const section = document.createElement("div");
+                    section.classList.add("category-section");
                     section.innerHTML = `<h3>${categoryName}</h3>`;
+                    const table = document.createElement("table");
                     items.forEach(item => {
                         const row = document.createElement("tr");
                         row.innerHTML = `
-                            <td><img src="${item.image}" alt="${item.name}"></td>
+                            <td><img src="${item.image}" alt="${item.name}" style="width: 50px; height: 50px;"></td>
                             <td>${item.name}</td>
                             <td>रु.${item.price}</td>
                             <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price}, '${item.image}')">Add</button></td>
                         `;
-                        section.appendChild(row);
+                        table.appendChild(row);
                     });
+                    section.appendChild(table);
                     menuTable.appendChild(section);
                 }
             }
