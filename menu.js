@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function loadMenu() {
     const urlParams = new URLSearchParams(window.location.search);
     const category = urlParams.get("category") || "meal";  // Default category is meal
-    const menuTable = document.querySelector(".order-section");  // Changed to use class instead of id
+    const menuTable = document.querySelector(".order-section");
     menuTable.innerHTML = "";
 
     // Fetch the data dynamically based on category
@@ -18,16 +18,31 @@ function loadMenu() {
         .then(menuItems => {
             if (Array.isArray(menuItems)) {
                 // If the data is a list of items
-                const table = createTable(menuItems);
-                menuTable.appendChild(table);
+                menuItems.forEach(item => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td><img src="${item.image}" alt="${item.name}"></td>
+                        <td>${item.name}</td>
+                        <td>रु.${item.price}</td>
+                        <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price}, '${item.image}')">Add</button></td>
+                    `;
+                    menuTable.appendChild(row);
+                });
             } else {
                 // If the data is structured by category (e.g., Drinks have subcategories like Soft Drinks and Hard Drinks)
                 for (const [categoryName, items] of Object.entries(menuItems)) {
                     const section = document.createElement("div");
-                    section.classList.add("category-section");
                     section.innerHTML = `<h3>${categoryName}</h3>`;
-                    const table = createTable(items);
-                    section.appendChild(table);
+                    items.forEach(item => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td><img src="${item.image}" alt="${item.name}"></td>
+                            <td>${item.name}</td>
+                            <td>रु.${item.price}</td>
+                            <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price}, '${item.image}')">Add</button></td>
+                        `;
+                        section.appendChild(row);
+                    });
                     menuTable.appendChild(section);
                 }
             }
@@ -35,35 +50,6 @@ function loadMenu() {
         .catch(error => {
             console.error('Error loading menu:', error);
         });
-}
-
-function createTable(items) {
-    const table = document.createElement("table");
-    const tableHeader = document.createElement("thead");
-    tableHeader.innerHTML = `
-        <tr>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Order</th>
-        </tr>
-    `;
-    table.appendChild(tableHeader);
-
-    const tableBody = document.createElement("tbody");
-    items.forEach(item => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td><img src="${item.image}" alt="${item.name}" style="width: 50px; height: 50px;"></td>
-            <td>${item.name}</td>
-            <td>रु.${item.price}</td>
-            <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price}, '${item.image}')">Add</button></td>
-        `;
-        tableBody.appendChild(row);
-    });
-    table.appendChild(tableBody);
-
-    return table;
 }
 
 function addToOrder(name, price, image) {
@@ -80,7 +66,7 @@ function addToOrder(name, price, image) {
 
 function updateOrderList() {
     const orderList = document.getElementById("orderList");
-
+    
     // Clear previous orders
     orderList.innerHTML = '';
 
@@ -128,6 +114,7 @@ function sendOrder() {
     const roomNumber = document.getElementById("roomNumber").value;
     const desiredTime = document.getElementById("desiredTime").value;
 
+    // Check if room number and desired time are provided
     if (!roomNumber) {
         alert("Please enter your room number.");
         return;
