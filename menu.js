@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function loadMenu() {
     const urlParams = new URLSearchParams(window.location.search);
     const category = urlParams.get("category") || "meal";  // Default category is meal
-    const menuTable = document.getElementById("menu");
+    const menuTable = document.querySelector(".order-section");  // Changed to use class instead of id
     menuTable.innerHTML = "";
 
     // Fetch the data dynamically based on category
