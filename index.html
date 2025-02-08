@@ -141,35 +141,81 @@ h3 {
     background-color: #e53935;
 }
 
+        
+
+/* Hide the hamburger icon and show the "Menu" text on mobile screens */
+@media (max-width: 768px) {
+    .navbar-toggler {
+        display: none; /* Hide the default hamburger icon */
+    }
+    
+    .mobile-menu-toggle {
+        display: inline-block; /* Show the "Menu" text */
+        background: none;
+        border: none;
+        font-size: 16px;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .navbar-collapse {
+        display: none; /* Hide the navbar on mobile initially */
+    }
+
+    /* When the "Menu" button is clicked, show the navbar links */
+    .navbar-toggler.collapsing + .navbar-collapse {
+        display: block;
+    }
+}
+
+/* For larger screens, show the hamburger icon and hide "Menu" text */
+@media (min-width: 769px) {
+    .navbar-toggler {
+        display: block; /* Show the hamburger icon */
+    }
+    
+    .mobile-menu-toggle {
+        display: none; /* Hide the "Menu" text on larger screens */
+    }
+}
 
         
     </style>
 </head>
 <body>
     <div class="container">
+
+
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/">Restaurant Menu</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/rest/?category=meal">Meal</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/rest/?category=dinner">Dinner</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/rest/?category=breakfast">Breakfast</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/rest/?category=snacks">Snacks</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">Restaurant Menu</a>
+    
+    <!-- Menu Button for Mobile -->
+    <button class="navbar-toggler mobile-menu-toggle" type="button" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span> Menu
+    </button>
+
+    <!-- Navbar Links -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/rest/?category=meal">Meal</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/rest/?category=dinner">Dinner</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/rest/?category=breakfast">Breakfast</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/rest/?category=snacks">Snacks</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+        
 
         <!-- Table displaying menu items -->
         <table>
