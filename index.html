@@ -155,17 +155,36 @@ h3 {
         color: #007bff;
     }
 
+    /* Move the menu to the right side */
     .navbar-collapse {
+        position: absolute;  /* Ensure menu items appear over content */
+        top: 56px; /* Adjust based on your navbar height */
+        right: 0;
+        background-color: #f8f9fa;
+        width: 200px;  /* Set a fixed width */
+        padding: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         display: none; /* Hide the menu initially */
+        transition: transform 0.3s ease-out; /* Speed up the transition */
+        transform: translateX(100%); /* Start with the menu off-screen */
     }
 
-    /* Show the menu when the button is clicked */
+    /* When the menu is toggled, show it and slide in from the right */
     .navbar-collapse.show {
         display: block;
+        transform: translateX(0); /* Move it into view */
+    }
+
+    .navbar-nav {
+        flex-direction: column; /* Stack the links vertically */
+    }
+
+    .nav-item {
+        margin: 10px 0;
     }
 }
 
-/* For larger screens, show the hamburger icon */
+/* For larger screens, keep the regular layout */
 @media (min-width: 769px) {
     .navbar-toggler {
         display: block; /* Show the hamburger icon */
@@ -174,10 +193,24 @@ h3 {
     .mobile-menu-toggle {
         display: none; /* Hide the "Menu" text on larger screens */
     }
+
+    .navbar-collapse {
+        display: flex !important; /* Display the menu horizontally */
+        position: static;
+        transform: translateX(0); /* Ensure the menu stays in its place */
+        box-shadow: none;
+    }
+
+    .navbar-nav {
+        flex-direction: row; /* Align items in a row on larger screens */
+    }
+
+    .nav-item {
+        margin: 0 10px;
+    }
 }
 
-        
-    </style>
+</style>
 
     
 </head>
@@ -208,10 +241,10 @@ h3 {
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/rest/?category=snacks">Snacks</a>
-            </li>
-        </ul>
-    </div>
-</nav>
+            </ul>
+        </div>
+    </nav>
+
 
 
 
