@@ -91,16 +91,20 @@ function removeFromOrder(index) {
 
 function updateOrderList() {
     const orderList = document.getElementById("orderList");
-    orderList.innerHTML = selectedOrders.map((item, index) => `
-        <div class="order-item">
-            <img src="${item.image}" alt="${item.name}" class="order-image">
-            <div class="order-details">
-                <p><strong>${item.name}</strong></p>
-                <p>रु.${item.price}</p>
-                <button class="cancel-btn" onclick="removeFromOrder(${index})">Cancel</button>
+    // Add "Your Order" title
+    orderList.innerHTML = `
+        <h3>Your Order</h3>
+        ${selectedOrders.map((item, index) => `
+            <div class="order-item">
+                <img src="${item.image}" alt="${item.name}" class="order-image">
+                <div class="order-details">
+                    <p><strong>${item.name}</strong></p>
+                    <p>रु.${item.price}</p>
+                    <button class="cancel-btn" onclick="removeFromOrder(${index})">Cancel</button>
+                </div>
             </div>
-        </div>
-    `).join("");
+        `).join("")}
+    `;
 }
 
 function updateTotalAmount() {
