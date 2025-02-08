@@ -63,7 +63,7 @@ function updateOrderList() {
         <div class="order-item">
             <img class="order-image" src="${menuData[item.name] ? menuData[item.name][0].image : ''}" alt="${item.name}">
             <div class="order-details">
-                <p>${item.name} x${item.quantity} - रु.${(item.price * item.quantity).toFixed(2)}</p>
+                <p>${item.name} <span class="quantity">(${item.quantity})</span> - रु.${(item.price * item.quantity).toFixed(2)}</p>
             </div>
             <button class="cancel-btn" onclick="removeFromOrder('${item.name}')">Cancel</button>
         </div>
@@ -105,7 +105,7 @@ function sendOrder() {
 
     let orderText = `Room No: ${roomNumber}\nDesired Time: ${desiredTime}\nOrder:\n`;
     selectedOrders.forEach(item => {
-        orderText += `- ${item.name} x${item.quantity} (रु.${(item.price * item.quantity).toFixed(2)})\n`;
+        orderText += `- ${item.name} (${item.quantity}) (रु.${(item.price * item.quantity).toFixed(2)})\n`;
     });
 
     const totalAmount = selectedOrders.reduce((total, item) => total + (item.price * item.quantity), 0);
