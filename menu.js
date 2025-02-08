@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     loadMenu();
     loadTheme();
     loadOrdersFromLocalStorage();
+    renderYourOrderSection();  // Render the "Your Order" section dynamically
 });
 
 function loadMenu() {
@@ -131,4 +132,12 @@ function loadTheme() {
     if (localStorage.getItem("theme") === "dark") {
         document.body.classList.add("dark-mode");
     }
+}
+
+// Function to render "Your Order" section dynamically
+function renderYourOrderSection() {
+    const orderSection = document.getElementById("orderSection");
+    const yourOrderTitle = document.createElement("h3");
+    yourOrderTitle.textContent = "Your Order";
+    orderSection.appendChild(yourOrderTitle);
 }
