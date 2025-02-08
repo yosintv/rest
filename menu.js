@@ -74,16 +74,16 @@ function sendOrder() {
         return;
     }
 
-    let orderText = `Room No: ${roomNumber}%0ADesired Time: ${desiredTime}%0AOrder:%0A`;
+    let orderText = `Room No: ${roomNumber}\nDesired Time: ${desiredTime}\nOrder:\n`;
     selectedOrders.forEach(item => {
-        orderText += `- ${item.name} ($${item.price})%0A`;
+        orderText += `- ${item.name} ($${item.price})\n`;
     });
 
     const totalAmount = selectedOrders.reduce((total, item) => total + item.price, 0);
-    orderText += `%0ATotal: $${totalAmount.toFixed(2)}`;
+    orderText += `\nTotal: $${totalAmount.toFixed(2)}`;
 
-    const whatsappURL = `https://wa.me/+819068332943?text=${orderText}`;
-    window.open(whatsappURL, "_blank");
+    const whatsappURL = `https://wa.me/819068332943?text=${encodeURIComponent(orderText)}`;
+    window.location.href = whatsappURL;
 }
 
 function toggleTheme() {
