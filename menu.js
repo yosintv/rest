@@ -22,25 +22,7 @@ let selectedOrders = [];
 document.addEventListener("DOMContentLoaded", function () {
     loadMenu();
     loadTheme();
-
-    // Load selected orders from localStorage if any and check expiration
-    const savedOrders = localStorage.getItem("selectedOrders");
-    const savedTime = localStorage.getItem("orderTimestamp");
-
-    if (savedOrders && savedTime) {
-        const currentTime = new Date().getTime();
-        const elapsedTime = currentTime - savedTime;
-
-        // If the saved orders are older than 10 minutes (600,000 milliseconds), clear them
-        if (elapsedTime < 600000) {
-            selectedOrders = JSON.parse(savedOrders);
-            updateOrderList();
-            updateTotalAmount();
-        } else {
-            localStorage.removeItem("selectedOrders");
-            localStorage.removeItem("orderTimestamp");
-        }
-    }
+    loadOrdersFromLocalStorage();
 });
 
 function loadMenu() {
@@ -64,52 +46,47 @@ function loadMenu() {
 }
 
 function addToOrder(name, price) {
-    // Add the item to the selectedOrders array
-    selectedOrders.push({ name, price });
-    
-    // Save the selected orders to localStorage with a timestamp
-    localStorage.setItem("selectedOrders", JSON.stringify(selectedOrders));
-    localStorage.setItem("orderTimestamp", new Date().getTime().toString());
-
-    // Update the order list and total amount
+    const existingOrder = selectedOrders.find(order => order.name === name);
+    if (existingOrder) {
+        existingOrder.quantity += 1;  // Increase quantity if item already exists
+    } else {
+        selectedOrders.push({ name, price, quantity: 1 });  // Add new item with quantity 1
+    }
     updateOrderList();
     updateTotalAmount();
-}
-
-function removeFromOrder(index) {
-    // Remove item from selectedOrders array
-    selectedOrders.splice(index, 1);
-    
-    // Save the updated orders to localStorage
-    localStorage.setItem("selectedOrders", JSON.stringify(selectedOrders));
-    localStorage.setItem("orderTimestamp", new Date().getTime().toString());
-
-    // Update the order list and total amount
-    updateOrderList();
-    updateTotalAmount();
+    saveOrdersToLocalStorage();
 }
 
 function updateOrderList() {
     const orderList = document.getElementById("orderList");
-    // Add "Your Order" title
-    orderList.innerHTML = `
-        <h3>Your Order</h3>
-        ${selectedOrders.map((item, index) => `
-            <div class="order-item">
-                <img src="${item.image}" alt="${item.name}" class="order-image">
-                <div class="order-details">
-                    <p><strong>${item.name}</strong></p>
-                    <p>रु.${item.price}</p>
-                    <button class="cancel-btn" onclick="removeFromOrder(${index})">Cancel</button>
-                </div>
+    orderList.innerHTML = selectedOrders.map(item => `
+        <div class="order-item">
+            <img class="order-image" src="${menuData[item.name] ? menuData[item.name][0].image : ''}" alt="${item.name}">
+            <div class="order-details">
+                <p>${item.name} x${item.quantity} - रु.${(item.price * item.quantity).toFixed(2)}</p>
             </div>
-        `).join("")}
-    `;
+            <button class="cancel-btn" onclick="removeFromOrder('${item.name}')">Cancel</button>
+        </div>
+    `).join("");
 }
 
 function updateTotalAmount() {
-    const totalAmount = selectedOrders.reduce((total, item) => total + item.price, 0);
+    const totalAmount = selectedOrders.reduce((total, item) => total + (item.price * item.quantity), 0);
     document.getElementById("totalAmount").textContent = `Total: रु.${totalAmount.toFixed(2)}`;
+}
+
+function removeFromOrder(name) {
+    const index = selectedOrders.findIndex(order => order.name === name);
+    if (index !== -1) {
+        if (selectedOrders[index].quantity > 1) {
+            selectedOrders[index].quantity -= 1;  // Decrease quantity if more than 1
+        } else {
+            selectedOrders.splice(index, 1);  // Remove item from the order if quantity is 1
+        }
+        updateOrderList();
+        updateTotalAmount();
+        saveOrdersToLocalStorage();
+    }
 }
 
 function sendOrder() {
@@ -128,28 +105,39 @@ function sendOrder() {
 
     let orderText = `Room No: ${roomNumber}\nDesired Time: ${desiredTime}\nOrder:\n`;
     selectedOrders.forEach(item => {
-        orderText += `- ${item.name} (रु.${item.price})\n`;
+        orderText += `- ${item.name} x${item.quantity} (रु.${(item.price * item.quantity).toFixed(2)})\n`;
     });
 
-    const totalAmount = selectedOrders.reduce((total, item) => total + item.price, 0);
+    const totalAmount = selectedOrders.reduce((total, item) => total + (item.price * item.quantity), 0);
     orderText += `\nTotal: रु.${totalAmount.toFixed(2)}`;
 
     const whatsappURL = `https://wa.me/819068332943?text=${encodeURIComponent(orderText)}`;
     window.location.href = whatsappURL;
 
-    // Clear the selected orders from memory and localStorage
-    selectedOrders = [];
-    localStorage.removeItem("selectedOrders");
-    localStorage.removeItem("orderTimestamp");
-
-    // Clear the order list and total amount on the page
-    updateOrderList();
-    updateTotalAmount();
+    clearOrders();
 }
 
-function toggleTheme() {
-    document.body.classList.toggle("dark-mode");
-    localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+function clearOrders() {
+    selectedOrders = [];
+    updateOrderList();
+    updateTotalAmount();
+    localStorage.removeItem("selectedOrders");
+}
+
+function saveOrdersToLocalStorage() {
+    const expirationTime = new Date().getTime() + 10 * 60 * 1000;  // 10 minutes from now
+    localStorage.setItem("selectedOrders", JSON.stringify({ orders: selectedOrders, expiration: expirationTime }));
+}
+
+function loadOrdersFromLocalStorage() {
+    const storedData = JSON.parse(localStorage.getItem("selectedOrders"));
+    if (storedData && storedData.expiration > new Date().getTime()) {
+        selectedOrders = storedData.orders;
+        updateOrderList();
+        updateTotalAmount();
+    } else {
+        clearOrders();
+    }
 }
 
 function loadTheme() {
