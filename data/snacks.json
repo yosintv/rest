@@ -1,38 +1,46 @@
 {
-  "softDrinks": [
-    {
-      "name": "Coke",
-      "price": 3,
-      "image": "images/coke.jpg"
-    },
-    {
-      "name": "Pepsi",
-      "price": 3,
-      "image": "images/pepsi.jpg"
-    },
-    {
-      "name": "Sprite",
-      "price": 2.5,
-      "image": "images/sprite.jpg"
-    }
-  ],
-
-    
-  "hardDrinks": [
-    {
-      "name": "Whiskey",
-      "price": 10,
-      "image": "images/whiskey.jpg"
-    },
-    {
-      "name": "Vodka",
-      "price": 9,
-      "image": "images/vodka.jpg"
-    },
-    {
-      "name": "Rum",
-      "price": 8,
-      "image": "images/rum.jpg"
-    }
-  ]
+    "Soft Drinks": [
+        {
+            "name": "Coca-Cola",
+            "image": "images/coca_cola.jpg",
+            "price": 50
+        },
+        {
+            "name": "Sprite",
+            "image": "images/sprite.jpg",
+            "price": 45
+        },
+        {
+            "name": "Pepsi",
+            "image": "images/pepsi.jpg",
+            "price": 55
+        },
+        {
+            "name": "Fanta",
+            "image": "images/fanta.jpg",
+            "price": 50
+        }
+    ],
+    "Hard Drinks": [
+        {
+            "name": "Whiskey",
+            "image": "images/whiskey.jpg",
+            "price": 500
+        },
+        {
+            "name": "Vodka",
+            "image": "images/vodka.jpg",
+            "price": 450
+        },
+        {
+            "name": "Rum",
+            "image": "images/rum.jpg",
+            "price": 400
+        },
+        {
+            "name": "Gin",
+            "image": "images/gin.jpg",
+            "price": 350
+        }
+    ]
 }
