@@ -1,4 +1,38 @@
-[
-    { "name": " Mutton ", "price": 12, "image": "images/grilled_chicken.jpg" },
-    { "name": " Chicken ", "price": 10, "image": "images/pasta.jpg" }
-]
+{
+  "softDrinks": [
+    {
+      "name": "Coke",
+      "price": 3,
+      "image": "images/coke.jpg"
+    },
+    {
+      "name": "Pepsi",
+      "price": 3,
+      "image": "images/pepsi.jpg"
+    },
+    {
+      "name": "Sprite",
+      "price": 2.5,
+      "image": "images/sprite.jpg"
+    }
+  ],
+
+    
+  "hardDrinks": [
+    {
+      "name": "Whiskey",
+      "price": 10,
+      "image": "images/whiskey.jpg"
+    },
+    {
+      "name": "Vodka",
+      "price": 9,
+      "image": "images/vodka.jpg"
+    },
+    {
+      "name": "Rum",
+      "price": 8,
+      "image": "images/rum.jpg"
+    }
+  ]
+}
