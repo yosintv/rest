@@ -76,9 +76,31 @@ function addToOrder(name, price) {
     updateTotalAmount();
 }
 
+function removeFromOrder(index) {
+    // Remove item from selectedOrders array
+    selectedOrders.splice(index, 1);
+    
+    // Save the updated orders to localStorage
+    localStorage.setItem("selectedOrders", JSON.stringify(selectedOrders));
+    localStorage.setItem("orderTimestamp", new Date().getTime().toString());
+
+    // Update the order list and total amount
+    updateOrderList();
+    updateTotalAmount();
+}
+
 function updateOrderList() {
     const orderList = document.getElementById("orderList");
-    orderList.innerHTML = selectedOrders.map(item => `<p>${item.name} - रु.${item.price}</p>`).join("");
+    orderList.innerHTML = selectedOrders.map((item, index) => `
+        <div class="order-item">
+            <img src="${item.image}" alt="${item.name}" class="order-image">
+            <div class="order-details">
+                <p><strong>${item.name}</strong></p>
+                <p>रु.${item.price}</p>
+                <button class="cancel-btn" onclick="removeFromOrder(${index})">Cancel</button>
+            </div>
+        </div>
+    `).join("");
 }
 
 function updateTotalAmount() {
