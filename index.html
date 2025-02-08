@@ -139,158 +139,35 @@ h3 {
     background-color: #e53935;
 }
 
+
         
-/* For mobile devices, hide the default hamburger icon and show the "Menu" text */
-@media (max-width: 768px) {
-    .navbar-toggler {
-        display: none; /* Hide the default hamburger icon */
-    }
-
-    .mobile-menu-toggle {
-        display: inline-block; /* Show the "Menu" text */
-        background: none;
-        border: none;
-        font-size: 16px;
-        font-weight: bold;
-        color: #007bff;
-    }
-
-    /* Move the menu to the right side */
-    .navbar-collapse {
-        position: absolute;  /* Ensure menu items appear over content */
-        top: 56px; /* Adjust based on your navbar height */
-        right: 0;
-        background-color: #f8f9fa;
-        width: 200px;  /* Set a fixed width */
-        padding: 10px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        visibility: hidden; /* Initially hidden */
-        opacity: 0; /* Set opacity to 0 */
-        transition: visibility 0s, opacity 0.3s ease-out; /* Use opacity and visibility for faster transitions */
-    }
-
-    /* When the menu is toggled, show it */
-    .navbar-collapse.show {
-        visibility: visible; /* Make it visible */
-        opacity: 1; /* Set opacity to 1 */
-    }
-
-    .navbar-nav {
-        flex-direction: column; /* Stack the links vertically */
-    }
-
-    .nav-item {
-        margin: 10px 0;
-        padding: 5px;
-        transition: background-color 0.3s, transform 0.3s;
-    }
-
-    /* Hover effect for mobile menu */
-    .nav-item:hover {
-        background-color: #007bff; /* Change background color on hover */
-        color: white; /* Change text color */
-        transform: scale(1.05); /* Slightly enlarge the item */
-    }
-
-    /* Active state for clicked items */
-    .nav-item:active {
-        background-color: #0056b3; /* Darken background when clicked */
-        transform: scale(0.98); /* Shrink the item slightly on click */
-    }
-
-    .nav-link {
-        text-decoration: none;
-        color: inherit;
-    }
-}
-
-/* For larger screens, keep the regular layout */
-@media (min-width: 769px) {
-    .navbar-toggler {
-        display: block; /* Show the hamburger icon */
-    }
-
-    .mobile-menu-toggle {
-        display: none; /* Hide the "Menu" text on larger screens */
-    }
-
-    .navbar-collapse {
-        display: flex !important; /* Display the menu horizontally */
-        position: static;
-        opacity: 1;
-        visibility: visible;
-        box-shadow: none;
-    }
-
-    .navbar-nav {
-        flex-direction: row; /* Align items in a row on larger screens */
-    }
-
-    .nav-item {
-        margin: 0 10px;
-        padding: 5px;
-        transition: background-color 0.3s, transform 0.3s;
-    }
-
-    /* Hover effect for large screens */
-    .nav-item:hover {
-        background-color: #007bff; /* Change background color */
-        color: white; /* Change text color */
-        transform: scale(1.05); /* Slightly enlarge the item */
-    }
-
-    /* Active state for clicked items on large screens */
-    .nav-item:active {
-        background-color: #0056b3; /* Darken background when clicked */
-        transform: scale(0.98); /* Shrink the item slightly on click */
-    }
-
-    .nav-link {
-        text-decoration: none;
-        color: inherit;
-    }
-}
-
-</style>
-
-    
+    </style>
 </head>
 <body>
     <div class="container">
-
-
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="/"> Rajdhani Guest House </a>
-    
-    <!-- Menu Button for Mobile -->
-    <button class="navbar-toggler mobile-menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-expanded="false" aria-controls="navbarNav">
-        <span class="navbar-toggler-icon"></span> Menu
-    </button>
-
-    <!-- Navbar Links -->
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/rest/?category=meal">Meal</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/rest/?category=dinner">Dinner</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/rest/?category=breakfast">Breakfast</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/rest/?category=snacks">Snacks</a>
-            </ul>
-        </div>
-    </nav>
-
-
-
-
-
-        
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/">Restaurant Menu</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rest/?category=meal">Meal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rest/?category=dinner">Dinner</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rest/?category=breakfast">Breakfast</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rest/?category=snacks">Snacks</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
         <!-- Table displaying menu items -->
         <table>
@@ -305,9 +182,11 @@ h3 {
             <tbody id="menu"></tbody>
         </table>
 
+        <!-- Order section -->
+        <div class="order-section">
 
-<!-- Order section -->
-<div class="order-section">
+
+            
 <div class="order-list" id="orderList"></div>
 <input type="text" id="roomNumber" placeholder="Enter Room Number">
 <textarea id="desiredTime" placeholder="Enter Desired Time"></textarea>
