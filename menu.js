@@ -61,20 +61,20 @@ function updateTotalAmount() {
 }
 
 function sendOrder() {
-    const tableNumber = document.getElementById("tableNumber").value;
-    const preferredTime = document.getElementById("preferredTime").value;
+    const roomNumber = document.getElementById("roomNumber").value;
+    const desiredTime = document.getElementById("desiredTime").value;
 
-    if (!tableNumber) {
-        alert("Please enter your table number.");
+    if (!roomNumber) {
+        alert("Please enter your room number.");
         return;
     }
 
-    if (!preferredTime) {
-        alert("Please select a preferred time.");
+    if (!desiredTime) {
+        alert("Please enter your desired time.");
         return;
     }
 
-    let orderText = `Table No: ${tableNumber}%0APreferred Time: ${preferredTime}%0AOrder:%0A`;
+    let orderText = `Room No: ${roomNumber}%0ADesired Time: ${desiredTime}%0AOrder:%0A`;
     selectedOrders.forEach(item => {
         orderText += `- ${item.name} ($${item.price})%0A`;
     });
