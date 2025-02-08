@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
     loadMenu();
     loadTheme();
     loadOrdersFromLocalStorage();
-    renderYourOrderSection();  // Render the "Your Order" section dynamically
 });
 
 function loadMenu() {
@@ -47,15 +46,29 @@ function addToOrder(name, price) {
 
 function updateOrderList() {
     const orderList = document.getElementById("orderList");
-    orderList.innerHTML = selectedOrders.map(item => `
-        <div class="order-item">
+    
+    // Clear previous orders
+    orderList.innerHTML = '';
+
+    // Add "Your Order" header
+    const orderHeader = document.createElement("div");
+    orderHeader.classList.add("order-header");
+    orderHeader.innerHTML = "<strong>Your Order</strong>";
+    orderList.appendChild(orderHeader);
+
+    // Add order items
+    selectedOrders.forEach(item => {
+        const orderItem = document.createElement("div");
+        orderItem.classList.add("order-item");
+        orderItem.innerHTML = `
             <img class="order-image" src="${item.image}" alt="${item.name}">
             <div class="order-details">
                 <p>${item.name} <span class="quantity">(${item.quantity})</span> - रु.${(item.price * item.quantity).toFixed(2)}</p>
             </div>
             <button class="cancel-btn" onclick="removeFromOrder('${item.name}')">Cancel</button>
-        </div>
-    `).join("");
+        `;
+        orderList.appendChild(orderItem);
+    });
 }
 
 function updateTotalAmount() {
@@ -132,12 +145,4 @@ function loadTheme() {
     if (localStorage.getItem("theme") === "dark") {
         document.body.classList.add("dark-mode");
     }
-}
-
-// Function to render "Your Order" section dynamically
-function renderYourOrderSection() {
-    const orderSection = document.getElementById("orderSection");
-    const yourOrderTitle = document.createElement("h3");
-    yourOrderTitle.textContent = "Your Order";
-    orderSection.appendChild(yourOrderTitle);
 }
