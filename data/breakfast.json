@@ -1,1 +1,4 @@
-
+[
+    { "name": "Grilled Chicken", "price": 12, "image": "images/grilled_chicken.jpg" },
+    { "name": "Pasta", "price": 10, "image": "images/pasta.jpg" }
+]
