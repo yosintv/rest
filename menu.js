@@ -1,141 +1,97 @@
-const order = {};
-let totalAmount = 0;
-
-// WhatsApp Phone Number
-const whatsappPhoneNumber = "+819068332943";  // Replace with the actual phone number
-
-// Menu object
-const menu = {
+const menuData = {
     meal: [
-        { name: "Grilled Chicken", price: 12, image: "images/grilled_chicken.jpg" },
-        { name: "Pasta", price: 10, image: "images/pasta.jpg" }
+        { name: "Grilled Chicken", price: "$12", image: "images/grilled_chicken.jpg" },
+        { name: "Pasta", price: "$10", image: "images/pasta.jpg" }
     ],
     dinner: [
-        { name: "Steak", price: 18, image: "images/steak.jpg" },
-        { name: "Salmon", price: 15, image: "images/salmon.jpg" }
+        { name: "Steak", price: "$18", image: "images/steak.jpg" },
+        { name: "Salmon", price: "$15", image: "images/salmon.jpg" }
     ],
     breakfast: [
-        { name: "Pancakes", price: 8, image: "images/pancakes.jpg" },
-        { name: "Omelette", price: 7, image: "images/omelette.jpg" }
+        { name: "Pancakes", price: "$8", image: "images/pancakes.jpg" },
+        { name: "Omelette", price: "$7", image: "images/omelette.jpg" }
     ],
     snacks: [
-        { name: "French Fries", price: 5, image: "images/fries.jpg" },
-        { name: "Nachos", price: 6, image: "images/nachos.jpg" }
+        { name: "French Fries", price: "$5", image: "images/fries.jpg" },
+        { name: "Nachos", price: "$6", image: "images/nachos.jpg" }
     ]
 };
 
-// Function to populate menu for each category
-function displayMenu() {
-    console.log("Displaying Menu...");
+let selectedOrders = [];
 
-    // Meal category
-    const mealMenuContainer = document.getElementById('mealMenu');
-    menu.meal.forEach(item => {
-        const row = `
-            <tr>
+document.addEventListener("DOMContentLoaded", function () {
+    loadMenu();
+    loadTheme();
+});
+
+function loadMenu() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const category = urlParams.get("category") || "meal";
+    const menuTable = document.getElementById("menu");
+    menuTable.innerHTML = "";
+
+    if (menuData[category]) {
+        menuData[category].forEach(item => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
                 <td><img src="${item.image}" alt="${item.name}"></td>
                 <td>${item.name}</td>
-                <td>$${item.price}</td>
-                <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price})">Add to Order</button></td>
-            </tr>
-        `;
-        mealMenuContainer.innerHTML += row;
-    });
-
-    // Dinner category
-    const dinnerMenuContainer = document.getElementById('dinnerMenu');
-    menu.dinner.forEach(item => {
-        const row = `
-            <tr>
-                <td><img src="${item.image}" alt="${item.name}"></td>
-                <td>${item.name}</td>
-                <td>$${item.price}</td>
-                <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price})">Add to Order</button></td>
-            </tr>
-        `;
-        dinnerMenuContainer.innerHTML += row;
-    });
-
-    // Breakfast category
-    const breakfastMenuContainer = document.getElementById('breakfastMenu');
-    menu.breakfast.forEach(item => {
-        const row = `
-            <tr>
-                <td><img src="${item.image}" alt="${item.name}"></td>
-                <td>${item.name}</td>
-                <td>$${item.price}</td>
-                <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price})">Add to Order</button></td>
-            </tr>
-        `;
-        breakfastMenuContainer.innerHTML += row;
-    });
-
-    // Snacks category
-    const snacksMenuContainer = document.getElementById('snacksMenu');
-    menu.snacks.forEach(item => {
-        const row = `
-            <tr>
-                <td><img src="${item.image}" alt="${item.name}"></td>
-                <td>${item.name}</td>
-                <td>$${item.price}</td>
-                <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price})">Add to Order</button></td>
-            </tr>
-        `;
-        snacksMenuContainer.innerHTML += row;
-    });
+                <td>${item.price}</td>
+                <td><button onclick="addToOrder('${item.name}', '${item.price}')">Add</button></td>
+            `;
+            menuTable.appendChild(row);
+        });
+    }
 }
 
-// Function to add items to the order
 function addToOrder(name, price) {
-    console.log(`Adding ${name} to order`);
-    if (!order[name]) {
-        order[name] = { quantity: 1, price };
-    } else {
-        order[name].quantity += 1;
-    }
+    selectedOrders.push({ name, price });
     updateOrderList();
 }
 
-// Function to update the order list
 function updateOrderList() {
-    const orderListContainer = document.getElementById('orderList');
-    orderListContainer.innerHTML = '';
-    totalAmount = 0;
-    for (const item in order) {
-        const itemTotal = order[item].price * order[item].quantity;
-        totalAmount += itemTotal;
-        orderListContainer.innerHTML += `
-            <div>
-                ${item} x ${order[item].quantity} = $${itemTotal.toFixed(2)}
-            </div>
-        `;
-    }
-    document.getElementById('totalAmount').textContent = `Total: $${totalAmount.toFixed(2)}`;
+    const orderList = document.getElementById("orderList");
+    orderList.innerHTML = selectedOrders.map(item => `<p>${item.name} - ${item.price}</p>`).join("");
 }
 
-// Function to send the order (through WhatsApp)
+function confirmOrder() {
+    if (selectedOrders.length === 0) {
+        alert("No items selected!");
+        return;
+    }
+    document.getElementById("sendOrderBtn").style.display = "block";
+}
+
 function sendOrder() {
-    const tableNumber = document.getElementById('tableNumber').value;
-    const preferredTime = document.getElementById('preferredTime').value;
-
-    if (tableNumber && Object.keys(order).length > 0) {
-        const orderDetails = {
-            tableNumber,
-            items: order,
-            totalAmount,
-            preferredTime
-        };
-
-        const orderMessage = `Order Details:\nTable: ${orderDetails.tableNumber}\nItems: ${JSON.stringify(orderDetails.items)}\nTotal: $${orderDetails.totalAmount.toFixed(2)}\nPreferred Time: ${orderDetails.preferredTime}`;
-
-        const whatsappUrl = `https://wa.me/${whatsappPhoneNumber}?text=${encodeURIComponent(orderMessage)}`;
-        window.open(whatsappUrl, '_blank');
-    } else {
-        alert("Please fill in your table number and order items.");
+    const tableNumber = document.getElementById("tableNumber").value;
+    const preferredTime = document.getElementById("preferredTime").value;
+    
+    if (!tableNumber) {
+        alert("Please enter your table number.");
+        return;
     }
+    
+    if (!preferredTime) {
+        alert("Please select a preferred time.");
+        return;
+    }
+
+    let orderText = `Table No: ${tableNumber}%0APreferred Time: ${preferredTime}%0AOrder:%0A`;
+    selectedOrders.forEach(item => {
+        orderText += `- ${item.name} (${item.price})%0A`;
+    });
+
+    const whatsappURL = `https://wa.me/+819068332943?text=${orderText}`;
+    window.open(whatsappURL, "_blank");
 }
 
-// Initial menu display
-window.onload = function() {
-    displayMenu();
-};
+function toggleTheme() {
+    document.body.classList.toggle("dark-mode");
+    localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+}
+
+function loadTheme() {
+    if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark-mode");
+    }
+}
