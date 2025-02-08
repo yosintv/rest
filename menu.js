@@ -18,33 +18,15 @@ function loadMenu() {
         .then(menuItems => {
             if (Array.isArray(menuItems)) {
                 // If the data is a list of items
-                menuItems.forEach(item => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td><img src="${item.image}" alt="${item.name}" style="width: 50px; height: 50px;"></td>
-                        <td>${item.name}</td>
-                        <td>रु.${item.price}</td>
-                        <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price}, '${item.image}')">Add</button></td>
-                    `;
-                    menuTable.appendChild(row);
-                });
+                const table = createTable(menuItems);
+                menuTable.appendChild(table);
             } else {
                 // If the data is structured by category (e.g., Drinks have subcategories like Soft Drinks and Hard Drinks)
                 for (const [categoryName, items] of Object.entries(menuItems)) {
                     const section = document.createElement("div");
                     section.classList.add("category-section");
                     section.innerHTML = `<h3>${categoryName}</h3>`;
-                    const table = document.createElement("table");
-                    items.forEach(item => {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `
-                            <td><img src="${item.image}" alt="${item.name}" style="width: 50px; height: 50px;"></td>
-                            <td>${item.name}</td>
-                            <td>रु.${item.price}</td>
-                            <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price}, '${item.image}')">Add</button></td>
-                        `;
-                        table.appendChild(row);
-                    });
+                    const table = createTable(items);
                     section.appendChild(table);
                     menuTable.appendChild(section);
                 }
@@ -53,6 +35,35 @@ function loadMenu() {
         .catch(error => {
             console.error('Error loading menu:', error);
         });
+}
+
+function createTable(items) {
+    const table = document.createElement("table");
+    const tableHeader = document.createElement("thead");
+    tableHeader.innerHTML = `
+        <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Order</th>
+        </tr>
+    `;
+    table.appendChild(tableHeader);
+
+    const tableBody = document.createElement("tbody");
+    items.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td><img src="${item.image}" alt="${item.name}" style="width: 50px; height: 50px;"></td>
+            <td>${item.name}</td>
+            <td>रु.${item.price}</td>
+            <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price}, '${item.image}')">Add</button></td>
+        `;
+        tableBody.appendChild(row);
+    });
+    table.appendChild(tableBody);
+
+    return table;
 }
 
 function addToOrder(name, price, image) {
@@ -69,7 +80,7 @@ function addToOrder(name, price, image) {
 
 function updateOrderList() {
     const orderList = document.getElementById("orderList");
-    
+
     // Clear previous orders
     orderList.innerHTML = '';
 
