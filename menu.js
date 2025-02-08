@@ -16,48 +16,35 @@ function loadMenu() {
     fetch(`data/${category}.json`)
         .then(response => response.json())
         .then(menuItems => {
-            if (category === "drinks") {
-                // Soft drinks section
-                const softDrinksSection = document.createElement("div");
-                softDrinksSection.innerHTML = "<h3>Soft Drinks</h3>";
-                menuItems.softDrinks.forEach(item => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td><img src="${item.image}" alt="${item.name}"></td>
-                        <td>${item.name}</td>
-                        <td>रु.${item.price}</td>
-                        <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price})">Add</button></td>
-                    `;
-                    softDrinksSection.appendChild(row);
-                });
-                menuTable.appendChild(softDrinksSection);
-
-                // Hard drinks section
-                const hardDrinksSection = document.createElement("div");
-                hardDrinksSection.innerHTML = "<h3>Hard Drinks</h3>";
-                menuItems.hardDrinks.forEach(item => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td><img src="${item.image}" alt="${item.name}"></td>
-                        <td>${item.name}</td>
-                        <td>रु.${item.price}</td>
-                        <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price})">Add</button></td>
-                    `;
-                    hardDrinksSection.appendChild(row);
-                });
-                menuTable.appendChild(hardDrinksSection);
-            } else {
-                // Handle other categories (meal, dinner, etc.)
+            if (Array.isArray(menuItems)) {
+                // If the data is a list of items
                 menuItems.forEach(item => {
                     const row = document.createElement("tr");
                     row.innerHTML = `
                         <td><img src="${item.image}" alt="${item.name}"></td>
                         <td>${item.name}</td>
                         <td>रु.${item.price}</td>
-                        <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price})">Add</button></td>
+                        <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price}, '${item.image}')">Add</button></td>
                     `;
                     menuTable.appendChild(row);
                 });
+            } else {
+                // If the data is structured by category (e.g., Drinks have subcategories like Soft Drinks and Hard Drinks)
+                for (const [categoryName, items] of Object.entries(menuItems)) {
+                    const section = document.createElement("div");
+                    section.innerHTML = `<h3>${categoryName}</h3>`;
+                    items.forEach(item => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td><img src="${item.image}" alt="${item.name}"></td>
+                            <td>${item.name}</td>
+                            <td>रु.${item.price}</td>
+                            <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price}, '${item.image}')">Add</button></td>
+                        `;
+                        section.appendChild(row);
+                    });
+                    menuTable.appendChild(section);
+                }
             }
         })
         .catch(error => {
@@ -65,12 +52,12 @@ function loadMenu() {
         });
 }
 
-function addToOrder(name, price) {
+function addToOrder(name, price, image) {
     const existingOrder = selectedOrders.find(order => order.name === name);
     if (existingOrder) {
         existingOrder.quantity += 1;
     } else {
-        selectedOrders.push({ name, price, quantity: 1 });
+        selectedOrders.push({ name, price, quantity: 1, image });
     }
     updateOrderList();
     updateTotalAmount();
