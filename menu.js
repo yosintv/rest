@@ -22,6 +22,25 @@ let selectedOrders = [];
 document.addEventListener("DOMContentLoaded", function () {
     loadMenu();
     loadTheme();
+
+    // Load selected orders from localStorage if any and check expiration
+    const savedOrders = localStorage.getItem("selectedOrders");
+    const savedTime = localStorage.getItem("orderTimestamp");
+
+    if (savedOrders && savedTime) {
+        const currentTime = new Date().getTime();
+        const elapsedTime = currentTime - savedTime;
+
+        // If the saved orders are older than 10 minutes (600,000 milliseconds), clear them
+        if (elapsedTime < 600000) {
+            selectedOrders = JSON.parse(savedOrders);
+            updateOrderList();
+            updateTotalAmount();
+        } else {
+            localStorage.removeItem("selectedOrders");
+            localStorage.removeItem("orderTimestamp");
+        }
+    }
 });
 
 function loadMenu() {
@@ -45,7 +64,14 @@ function loadMenu() {
 }
 
 function addToOrder(name, price) {
+    // Add the item to the selectedOrders array
     selectedOrders.push({ name, price });
+    
+    // Save the selected orders to localStorage with a timestamp
+    localStorage.setItem("selectedOrders", JSON.stringify(selectedOrders));
+    localStorage.setItem("orderTimestamp", new Date().getTime().toString());
+
+    // Update the order list and total amount
     updateOrderList();
     updateTotalAmount();
 }
@@ -76,14 +102,23 @@ function sendOrder() {
 
     let orderText = `Room No: ${roomNumber}\nDesired Time: ${desiredTime}\nOrder:\n`;
     selectedOrders.forEach(item => {
-        orderText += `- ${item.name} (रु.${item.price})\n`; // Add Your Own Currency Here
+        orderText += `- ${item.name} (रु.${item.price})\n`;
     });
 
     const totalAmount = selectedOrders.reduce((total, item) => total + item.price, 0);
-    orderText += `\nTotal: रु.${totalAmount.toFixed(2)}`; // Add Your Own Currency Here
+    orderText += `\nTotal: रु.${totalAmount.toFixed(2)}`;
 
     const whatsappURL = `https://wa.me/819068332943?text=${encodeURIComponent(orderText)}`;
     window.location.href = whatsappURL;
+
+    // Clear the selected orders from memory and localStorage
+    selectedOrders = [];
+    localStorage.removeItem("selectedOrders");
+    localStorage.removeItem("orderTimestamp");
+
+    // Clear the order list and total amount on the page
+    updateOrderList();
+    updateTotalAmount();
 }
 
 function toggleTheme() {
