@@ -218,7 +218,7 @@ function loadMenu() {
     menuTable.innerHTML = "";
 
     // Fetch the data dynamically based on category
-    fetch(`https://yosintv.github.io/rest/data/${category}.json`)
+    fetch(`https://yosintv.github.io/rest/data/meal.json`)
         .then(response => response.json())
         .then(menuItems => {
             menuItems.forEach(item => {
