@@ -90,7 +90,7 @@
             const menuTable = document.getElementById("menu");
             menuTable.innerHTML = "";
 
-            // Fetch menu items from local JSON file based on category
+            // Fetch menu items from the provided URL based on category
             fetch(`https://yosintv.github.io/rest/data/${category}.json`)
                 .then(response => response.json())
                 .then(menuItems => {
