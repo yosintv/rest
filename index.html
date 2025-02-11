@@ -192,23 +192,11 @@ h3 {
   <script>
     let selectedOrders = [];
 
-// Firebase configuration
-const firebaseConfig = {
-          apiKey: "AIzaSyDXFM60u89ZCkb9CAQhJJ3VxvckYmKCtgc",
-            authDomain: "hotel-242e7.firebaseapp.com",
-            projectId: "hotel-242e7",
-            storageBucket: "hotel-242e7.appspot.com",
-            messagingSenderId: "461665926049",
-            appId: "1:461665926049:web:7d3391d99cdb5a2959e9e0",
-            measurementId: "G-MDNRGJQVPL"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
 document.addEventListener("DOMContentLoaded", function () {
     loadMenu();
+    loadTheme();
+    loadOrdersFromLocalStorage();
+    renderYourOrderSection();  // Render the "Your Order" section dynamically
 });
 
 function loadMenu() {
@@ -218,7 +206,7 @@ function loadMenu() {
     menuTable.innerHTML = "";
 
     // Fetch the data dynamically based on category
-    fetch(`https://yosintv.github.io/rest/data/meal.json`)
+    fetch(`data/${category}.json`)
         .then(response => response.json())
         .then(menuItems => {
             menuItems.forEach(item => {
@@ -227,7 +215,7 @@ function loadMenu() {
                     <td><img src="${item.image}" alt="${item.name}"></td>
                     <td>${item.name}</td>
                     <td>रु.${item.price}</td>
-                    <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price}, '${item.image}')">Add</button></td>
+                    <td><button class="add-btn" onclick="addToOrder('${item.name}', ${item.price})">Add</button></td>
                 `;
                 menuTable.appendChild(row);
             });
@@ -237,82 +225,40 @@ function loadMenu() {
         });
 }
 
-function addToOrder(name, price, image) {
-    const existingOrder = selectedOrders.find(order => order.name === name);
-    if (existingOrder) {
-        existingOrder.quantity += 1;
-    } else {
-        selectedOrders.push({ name, price, quantity: 1, image });
-    }
-    updateOrderList();
-    updateTotalAmount();
+function addToOrder(name, price) {
+    selectedOrders.push({ name, price });
+    saveOrdersToLocalStorage();
+    renderYourOrderSection();
 }
 
-function updateOrderList() {
-    const orderList = document.getElementById("orderList");
-    orderList.innerHTML = selectedOrders.map(item => `
-        <div class="order-item">
-            <img class="order-image" src="${item.image}" alt="${item.name}">
-            <div class="order-details">
-                <p>${item.name} <span class="quantity">(${item.quantity})</span> - रु.${(item.price * item.quantity).toFixed(2)}</p>
-            </div>
-            <button class="cancel-btn" onclick="removeFromOrder('${item.name}')">Cancel</button>
-        </div>
-    `).join("");
+function saveOrdersToLocalStorage() {
+    localStorage.setItem("selectedOrders", JSON.stringify(selectedOrders));
 }
 
-function updateTotalAmount() {
-    const totalAmount = selectedOrders.reduce((total, item) => total + (item.price * item.quantity), 0);
-    document.getElementById("totalAmount").textContent = `Total: रु.${totalAmount.toFixed(2)}`;
-}
-
-function removeFromOrder(name) {
-    const index = selectedOrders.findIndex(order => order.name === name);
-    if (index !== -1) {
-        if (selectedOrders[index].quantity > 1) {
-            selectedOrders[index].quantity -= 1;
-        } else {
-            selectedOrders.splice(index, 1);
-        }
-        updateOrderList();
-        updateTotalAmount();
+function loadOrdersFromLocalStorage() {
+    const orders = localStorage.getItem("selectedOrders");
+    if (orders) {
+        selectedOrders = JSON.parse(orders);
     }
 }
 
-function sendOrder() {
-    const roomNumber = document.getElementById("roomNumber").value;
-    const desiredTime = document.getElementById("desiredTime").value;
+function renderYourOrderSection() {
+    const orderSection = document.getElementById("yourOrder");
+    orderSection.innerHTML = ""; // Clear previous orders
 
-    if (!roomNumber || !desiredTime) {
-        alert("Please fill in all fields.");
+    if (selectedOrders.length === 0) {
+        orderSection.innerHTML = "<p>No items in your order.</p>";
         return;
     }
 
-    const orderData = {
-        roomNumber,
-        desiredTime,
-        items: selectedOrders,
-        total: selectedOrders.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2),
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    };
+    const orderList = document.createElement("ul");
+    selectedOrders.forEach(order => {
+        const listItem = document.createElement("li");
+        listItem.textContent = `${order.name} - रु.${order.price}`;
+        orderList.appendChild(listItem);
+    });
 
-    // Send order to Firestore
-    db.collection("orders").add(orderData)
-        .then(() => {
-            alert("Order sent successfully!");
-            clearOrders();
-            window.location.href = "owner.html"; // Redirect to owner.html
-        })
-        .catch(error => {
-            console.error("Error sending order: ", error);
-            alert("Failed to send order. Please try again.");
-        });
-}
-
-function clearOrders() {
-    selectedOrders = [];
-    updateOrderList();
-    updateTotalAmount();
+    orderSection.appendChild(orderList);
 }
 
   </script>
