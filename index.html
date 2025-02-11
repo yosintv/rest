@@ -2,199 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1" name="viewport"/>
-    <title>Restaurant Menu</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f8f8f8;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            transition: background 0.3s, color 0.3s;
-        }
-        .category-links a {
-            font-weight: bold;
-            padding: 10px;
-            display: inline-block;
-            color: #ff9800;
-        }
-        .category-links a:hover {
-            background-color: #ff9800;
-            color: white;
-            border-radius: 5px;
+            margin: 20px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
-            box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            overflow: hidden;
-            margin-top: 20px;
         }
         th, td {
-            padding: 12px;
+            padding: 10px;
+            border: 1px solid #ccc;
             text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #ff9800;
-            color: white;
         }
         img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 8px;
+            width: 50px;
+            height: auto;
         }
-        .order-section {
+        #yourOrder {
             margin-top: 20px;
         }
-        .order-section input, .order-section textarea {
-            padding: 10px;
-            margin-bottom: 10px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .order-section button {
-            padding: 10px;
-            background: #ff9800;
-            color: white;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-        .order-section button:hover {
-            background: #ff5722;
-        }
-        .add-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .add-btn:hover {
-            background-color: #45a049;
-        }
-        .total-amount {
-            font-weight: bold;
-            margin-top: 15px;
-        }
-
-h3 {
-    font-size: 24px;
-    color: #333;
-    text-align: center;
-    margin-bottom: 20px;
-    font-weight: bold;
-}
-
-.order-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-}
-
-.order-image {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-right: 15px;
-}
-
-.order-details {
-    flex-grow: 1;
-}
-
-.order-details p {
-    margin: 0;
-}
-
-.cancel-btn {
-    background-color: #f44336;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.cancel-btn:hover {
-    background-color: #e53935;
-}
-
-
-        
     </style>
+</head>
 <body>
-    <div class="container">
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/">Restaurant Menu</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" href="/rest/?category=meal">Meal</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/rest/?category=dinner">Dinner</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/rest/?category=breakfast">Breakfast</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/rest/?category=snacks">Snacks</a></li>
-                </ul>
-            </div>
-        </nav>
 
-        <!-- Table displaying menu items -->
-        <table>
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Order</th>
-                </tr>
-            </thead>
-            <tbody id="menu"></tbody>
-        </table>
+<h1>Menu</h1>
+<table id="menu"></table>
 
-        <!-- Order section -->
-        <div class="order-section">
-            <div class="order-list" id="orderList"></div>
-            <input type="text" id="roomNumber" placeholder="Enter Room Number">
-            <textarea id="desiredTime" placeholder="Enter Desired Time"></textarea>
-            <div class="total-amount" id="totalAmount">Total: रु.0.00</div>
-            <button onclick="sendOrder()" id="sendOrderBtn">Send Order</button>
-        </div>
-    </div>
+<h2>Your Order</h2>
+<div id="yourOrder"></div>
 
-    <!-- Bootstrap JS and Popper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
-
-  <script>
-    let selectedOrders = [];
+<script>
+let selectedOrders = [];
 
 document.addEventListener("DOMContentLoaded", function () {
     loadMenu();
-    loadTheme();
     loadOrdersFromLocalStorage();
     renderYourOrderSection();  // Render the "Your Order" section dynamically
 });
@@ -226,6 +71,7 @@ function loadMenu() {
 }
 
 function addToOrder(name, price) {
+    console.log("Adding to order:", name, price); // Log the item being added
     selectedOrders.push({ name, price });
     saveOrdersToLocalStorage();
     renderYourOrderSection();
@@ -233,6 +79,7 @@ function addToOrder(name, price) {
 
 function saveOrdersToLocalStorage() {
     localStorage.setItem("selectedOrders", JSON.stringify(selectedOrders));
+    console.log("Saved orders to localStorage:", selectedOrders); // Log saved orders
 }
 
 function loadOrdersFromLocalStorage() {
@@ -260,8 +107,7 @@ function renderYourOrderSection() {
 
     orderSection.appendChild(orderList);
 }
+</script>
 
-  </script>
-  
-  </body>
+</body>
 </html>
